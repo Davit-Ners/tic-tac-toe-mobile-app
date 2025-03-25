@@ -1,32 +1,56 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, GestureResponderEvent } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, GestureResponderEvent, Button } from "react-native";
 import getFirstTurn from "../services/get-first-turn.ts";
 import { Info } from "../components/info/info.tsx";
+import checkVictory from "../services/check-victory.ts";
 
 export function GameGrid() {
 
+    const test = [
+        ['', '0', '0'],
+        ['', '0', ''],
+        ['0', '', '0'],
+    ]
+
     const [ grid, setGrid ] = useState([
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
     ]);
 
     const [ turn, setTurn ] = useState(getFirstTurn());
+    const [ win, setWin ] = useState('');
 
     const handlePress = (rowIndex: number, colIndex: number) => {
-        if (grid[rowIndex][colIndex] === null) {
-            setGrid(prev => prev.map((row, r) => (
+        if (!grid[rowIndex][colIndex] && !win) {
+            const newGrid = grid.map((row, r) => (
                 row.map((col, c) => (
                     colIndex === c && rowIndex === r ? turn : col
                 ))
-            )));
+            ));
+            setGrid(newGrid);
+            if (checkVictory(newGrid, turn)) {
+                console.log(`${turn} à gagné !`);
+                setWin(turn);
+                
+            };
             setTurn(turn === 'X' ? '0' : 'X');
         }
     };
+
+    const handleReplay = () => {
+        setGrid([
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ]);
+        setWin('');
+        setTurn(getFirstTurn());
+    }
     
     return (
         <>
-            <Info turn={turn}/>
+            <Info turn={turn} win={win}/>
             <View style={styles.grid}>
                 <Text></Text>
                 {grid.map((row,rowIndex) => (
@@ -37,6 +61,7 @@ export function GameGrid() {
                     ))}</View>
                 ))}
             </View>
+            {win && <Button title="Relancer la partie" onPress={handleReplay}></Button>}
         </>
     );
 };

@@ -1,10 +1,10 @@
-const mockData: number[][] = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0]
+const mockData: string[][] = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
 ];
 
-function checkRow(grid: number[][], player: number): boolean {
+function checkRow(grid: string[][], player: string): boolean {
     let victory: boolean;
     for (const row of grid) {
         victory = true;
@@ -16,7 +16,7 @@ function checkRow(grid: number[][], player: number): boolean {
     return false;
 };
 
-function checkCol(grid: number[][], player: number): boolean {
+function checkCol(grid: string[][], player: string): boolean {
     let victory: boolean;
 
     for (let i = 0; i < grid.length; i++) {
@@ -29,7 +29,7 @@ function checkCol(grid: number[][], player: number): boolean {
     return false;
 };
 
-function checkDiag(grid: number[][], player: number): boolean {
+function checkDiag(grid: string[][], player: string): boolean {
     let victory = true;
     for (let i = 0; i < grid.length; i++)  {
         if (grid[i][i] !== player) victory = false;
@@ -46,6 +46,6 @@ function checkDiag(grid: number[][], player: number): boolean {
     return victory;
 };
 
-export default function checkVictory(grid: number[][], player: number): boolean {
+export default function checkVictory(grid: string[][], player: string): boolean {
     return checkRow(grid, player) || checkCol(grid, player) || checkDiag(grid, player);
 };
