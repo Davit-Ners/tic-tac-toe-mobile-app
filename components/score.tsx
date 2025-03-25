@@ -4,7 +4,7 @@ export function Score({ x, o }) {
     return (
         <View style={styles.scoreContainer}>
             <Text style={styles.text}>Score</Text>
-            <Text style={styles.text}>X = {x} ||| 0 = {o}</Text>
+            <Text style={styles.text}>Player-X = {x} ||| Player-0 = {o}</Text>
         </View>
     );
 };
@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
         flexDirection: "column"
     },
     text: {
-        fontSize: 30
+        fontSize: 20
     }
 });
