@@ -8,7 +8,7 @@ export default function App() {
     <>
       <Header />
       <View style={styles.container}>
-        {/* <StatusBar style="auto" /> */}
+        <StatusBar backgroundColor="black" style="light" />
         <GameGrid />
       </View>
     </>
@@ -23,5 +23,5 @@ const styles = StyleSheet.create({
     paddingTop: 25,
     backgroundColor: '#fff',
     gap: 25
-  },
+  }
 });

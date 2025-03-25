@@ -23,9 +23,12 @@ export function GameGrid() {
     const [ win, setWin ] = useState('');
     const [ x, setX ] = useState(0);
     const [ o, setO ] = useState(0);
+    const [ equal, setEqual ] = useState(false);
+    const [ playCount, setPlayCount ] = useState(0);
 
     const handlePress = (rowIndex: number, colIndex: number) => {
         if (!grid[rowIndex][colIndex] && !win) {
+            setPlayCount(c => c + 1);
             const newGrid = grid.map((row, r) => (
                 row.map((col, c) => (
                     colIndex === c && rowIndex === r ? turn : col
@@ -33,11 +36,13 @@ export function GameGrid() {
             ));
             setGrid(newGrid);
             if (checkVictory(newGrid, turn)) {
-                console.log(`${turn} à gagné !`);
                 setWin(turn);
-                
+                turn === 'X' ? setX(value => value + 1) : setO(value => value + 1);
             };
             setTurn(turn === 'X' ? '0' : 'X');
+        }
+        if (playCount === 8) {
+            setEqual(true);
         }
     };
 
@@ -49,23 +54,25 @@ export function GameGrid() {
         ]);
         setWin('');
         setTurn(getFirstTurn());
+        setPlayCount(0);
+        setEqual(false);
     }
     
     return (
         <>
             <Score x={x} o={o}/>
-            <Info turn={turn} win={win}/>
+            {equal ? <Text style={styles.text}>Oh, vous avez fait match nul !</Text> : <Info turn={turn} win={win}/>}
             <View style={styles.grid}>
                 <Text></Text>
                 {grid.map((row,rowIndex) => (
                     <View key={rowIndex} style={styles.row}>{row.map((col, colIndex) => (
-                        <TouchableOpacity disabled={win ? true : grid[rowIndex][colIndex] !== ''} key={colIndex} style={styles.block} onPress={() => handlePress(rowIndex, colIndex)}>
+                        <TouchableOpacity disabled={win ? true : grid[rowIndex][colIndex] !== '' ? true : equal} key={colIndex} style={styles.block} onPress={() => handlePress(rowIndex, colIndex)}>
                             <Text style={styles.content}>{col ?? ''}</Text>
                         </TouchableOpacity>
                     ))}</View>
                 ))}
             </View>
-            {win && <View style={styles.btnContainer}>
+            {(win || equal) && <View style={styles.btnContainer}>
                   <Button title="Relancer la partie" onPress={handleReplay} color={'black'}></Button>
             </View>}
         </>
@@ -113,5 +120,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: "hidden",
         width: 200,
+    },
+    text: {
+        fontSize: 25
     }
 });
