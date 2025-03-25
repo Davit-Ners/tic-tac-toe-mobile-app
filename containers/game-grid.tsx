@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, GestureResponderEvent } from "react-native";
+import getFirstTurn from "../services/get-first-turn.ts";
+import { Info } from "../components/info/info.tsx";
 
 export function GameGrid() {
 
@@ -9,21 +11,33 @@ export function GameGrid() {
         [null, null, null]
     ]);
 
-    const handlePress = (rowIndex: number, colIndex: number): void => {
-        console.log(rowIndex, colIndex);
+    const [ turn, setTurn ] = useState(getFirstTurn());
+
+    const handlePress = (rowIndex: number, colIndex: number) => {
+        if (grid[rowIndex][colIndex] === null) {
+            setGrid(prev => prev.map((row, r) => (
+                row.map((col, c) => (
+                    colIndex === c && rowIndex === r ? turn : col
+                ))
+            )));
+            setTurn(turn === 'X' ? '0' : 'X');
+        }
     };
     
     return (
-        <View style={styles.grid}>
-            <Text></Text>
-            {grid.map((row,rowIndex) => (
-                <View key={rowIndex} style={styles.row}>{row.map((col, colIndex) => (
-                    <TouchableOpacity key={colIndex} style={styles.block}>
-                        <Text style={styles.content}>{col ?? ''}</Text>
-                    </TouchableOpacity>
-                ))}</View>
-            ))}
-        </View>
+        <>
+            <Info turn={turn}/>
+            <View style={styles.grid}>
+                <Text></Text>
+                {grid.map((row,rowIndex) => (
+                    <View key={rowIndex} style={styles.row}>{row.map((col, colIndex) => (
+                        <TouchableOpacity key={colIndex} style={styles.block} onPress={() => handlePress(rowIndex, colIndex)}>
+                            <Text style={styles.content}>{col ?? ''}</Text>
+                        </TouchableOpacity>
+                    ))}</View>
+                ))}
+            </View>
+        </>
     );
 };
 
