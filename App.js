@@ -1,21 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { GameGrid } from './containers/game-grid.tsx';
+import { Header } from './containers/header.tsx';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <GameGrid />
-    </View>
+    <>
+      <Header />
+      <View style={styles.container}>
+        {/* <StatusBar style="auto" /> */}
+        <GameGrid />
+      </View>
+    </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 25,
+    backgroundColor: '#fff',
+    gap: 25
   },
 });
