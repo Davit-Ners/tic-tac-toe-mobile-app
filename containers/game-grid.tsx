@@ -38,6 +38,7 @@ export function GameGrid() {
             if (checkVictory(newGrid, turn)) {
                 setWin(turn);
                 turn === 'X' ? setX(value => value + 1) : setO(value => value + 1);
+                return;
             };
             setTurn(turn === 'X' ? '0' : 'X');
         }
